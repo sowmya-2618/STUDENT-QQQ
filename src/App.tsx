@@ -6,6 +6,7 @@ import Talent from './pages/Talent'
 import Simulator from './pages/Simulator'
 import Opportunities from './pages/Opportunities'
 import ActionPlan from './pages/ActionPlan'
+import Upload from './pages/Upload'
 
 const links: { to: string; label: string; end?: boolean }[] = [
   { to: '/', label: 'Dashboard', end: true },
@@ -14,6 +15,7 @@ const links: { to: string; label: string; end?: boolean }[] = [
   { to: '/opportunities', label: 'Opportunities' },
   { to: '/action-plan', label: 'Action Plan' },
   { to: '/simulator', label: 'What-If' },
+  { to: '/upload', label: 'Upload CSV' },
 ]
 
 function NotFound() {
@@ -44,6 +46,7 @@ export default function App() {
         <Route path="/opportunities" element={<Opportunities />} />
         <Route path="/action-plan" element={<ActionPlan />} />
         <Route path="/simulator" element={<Simulator />} />
+        <Route path="/upload" element={<Upload />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
