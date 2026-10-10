@@ -9,7 +9,7 @@ export type Student = {
 
 // SAMPLE DATA: fictional students for demo only
 const names = ['Sarigama','Sowmya ','Asritha','Shrilu','Mahesh Babu','Amrutha','Harsha Vardhan','Neelima','Pavan Kalyan','Dhoni','Triveni','Srivalli','Joshwa','Keerthi','Sai Charan','Nandu','Siva Sai Krishna','Ramesh','Munna','Anil Kumar','Swathi','Megha Sree','Jyothi','Praveen','Meghana','Charan','Sirisha','Vamsi','Tejaswi','Rohit','Surya','Arjun','Haritha','Ajay','Bindu','Varsha','Sneha','Bharath','Gayathri','Dinesh']
-const depts = ['CSE', 'ECE', 'MECH', 'CIVIL', 'AI&DS', 'AI', 'AI&ML', 'IOT', 'DS', '']
+export const depts = ['CSE', 'ECE', 'MECH', 'CIVIL', 'AI&DS', 'AI', 'AI&ML', 'IOT', 'DS', '']
 const pool: Record<string, string[]> = {
   CSE: ['React', 'Python', 'SQL'],
   ECE: ['Embedded C', 'IoT'],
