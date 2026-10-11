@@ -7,6 +7,7 @@ import Simulator from './pages/Simulator'
 import Opportunities from './pages/Opportunities'
 import ActionPlan from './pages/ActionPlan'
 import Upload from './pages/Upload'
+import Reports from './pages/Reports'
 
 const links: { to: string; label: string; end?: boolean }[] = [
   { to: '/', label: 'Dashboard', end: true },
@@ -15,6 +16,7 @@ const links: { to: string; label: string; end?: boolean }[] = [
   { to: '/opportunities', label: 'Opportunities' },
   { to: '/action-plan', label: 'Action Plan' },
   { to: '/simulator', label: 'What-If' },
+  { to: '/reports', label: 'Reports' },
   { to: '/upload', label: 'Upload CSV' },
 ]
 
@@ -42,6 +44,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/students" element={<Students />} />
         <Route path="/students/:id" element={<Profile />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/talent" element={<Talent />} />
         <Route path="/opportunities" element={<Opportunities />} />
         <Route path="/action-plan" element={<ActionPlan />} />
