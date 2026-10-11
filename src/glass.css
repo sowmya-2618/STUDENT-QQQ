@@ -1,0 +1,86 @@
+/* ===== Glass theme (app pages only) ===== */
+.app-shell {
+  background:
+    radial-gradient(60rem 40rem at 10% -10%, rgba(37, 99, 235, 0.28), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%, rgba(20, 184, 166, 0.24), transparent 55%),
+    radial-gradient(50rem 40rem at 50% 110%, rgba(11, 27, 58, 0.2), transparent 60%),
+    linear-gradient(135deg, #e8eefc 0%, #eaf7f6 100%);
+  background-attachment: fixed;
+}
+
+/* every white card becomes frosted glass */
+.app-shell main .bg-white {
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px rgba(11, 27, 58, 0.1);
+  transition: box-shadow 0.25s ease;
+}
+.app-shell main .bg-white:hover {
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.16);
+}
+.app-shell main .bg-slate-100,
+.app-shell main .bg-slate-50 {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* inputs, selects */
+.app-shell main input:not([type='range']):not([type='checkbox']):not([type='radio']),
+.app-shell main select,
+.app-shell main textarea {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 0.5rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.app-shell main input:focus,
+.app-shell main select:focus,
+.app-shell main textarea:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.5);
+  outline-offset: 1px;
+}
+
+/* tables */
+.app-shell main tbody tr:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+/* sidebar and mobile header */
+.sidebar-glass {
+  background: linear-gradient(180deg, rgba(11, 27, 58, 0.9), rgba(11, 27, 58, 0.74));
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+.header-glass {
+  background: linear-gradient(90deg, rgba(11, 27, 58, 0.92), rgba(37, 99, 235, 0.82));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* page fade-in */
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-fade {
+  animation: pageFade 0.35s ease both;
+}
+
+/* slim scrollbar */
+.app-shell ::-webkit-scrollbar { width: 8px; height: 8px; }
+.app-shell ::-webkit-scrollbar-thumb { background: rgba(11, 27, 58, 0.25); border-radius: 8px; }
+
+/* print: plain white */
+@media print {
+  .app-shell { background: #fff; }
+  .app-shell main .bg-white {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+}
