@@ -1,0 +1,600 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+.siq-login,
+.siq-login * {
+  box-sizing: border-box;
+}
+
+.siq-login {
+  --navy: #07101f;
+  --panel: #0b1729;
+  --blue: #5385ff;
+  --teal: #27e0d0;
+  --muted: #96a8c3;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--navy);
+  color: #f4f7ff;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.siq-login button,
+.siq-login input {
+  font: inherit;
+}
+
+.siq-orb {
+  position: absolute;
+  z-index: -1;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.siq-orb-one {
+  background: #1765ff;
+  top: -220px;
+  left: -150px;
+}
+
+.siq-orb-two {
+  background: #00d5c3;
+  bottom: -260px;
+  right: -150px;
+}
+
+.siq-brand-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px clamp(28px, 6vw, 88px) 34px;
+  border-right: 1px solid rgba(146, 176, 226, 0.12);
+  background:
+    radial-gradient(ellipse at 15% 70%, rgba(26, 83, 191, 0.16), transparent 58%),
+    linear-gradient(145deg, rgba(15, 34, 65, 0.75), rgba(7, 16, 31, 0.35));
+}
+
+.siq-brand {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 13px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.siq-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(88, 139, 255, 0.55);
+  border-radius: 15px;
+  background: linear-gradient(140deg, #356bff, #13cfc9);
+  box-shadow: 0 8px 30px rgba(44, 104, 255, 0.2);
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.siq-brand-icon span {
+  color: #c5fff8;
+}
+
+.siq-brand strong,
+.siq-mobile-brand strong {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 25px;
+  letter-spacing: -1px;
+}
+
+.siq-brand strong span,
+.siq-mobile-brand strong span {
+  color: var(--teal);
+}
+
+.siq-brand small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.siq-hero {
+  width: 100%;
+  max-width: 600px;
+  margin: 65px 0;
+}
+
+.siq-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #8fb5ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.siq-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 14px var(--teal);
+}
+
+.siq-hero h1 {
+  margin: 25px 0 20px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(42px, 4.7vw, 67px);
+  font-weight: 600;
+  letter-spacing: -3px;
+  line-height: 1.12;
+}
+
+.siq-hero h1 span {
+  color: transparent;
+  background: linear-gradient(100deg, #77a2ff, #25e5d0);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.siq-description {
+  max-width: 465px;
+  color: #9daec7;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.siq-features {
+  display: grid;
+  gap: 25px;
+  margin-top: 42px;
+}
+
+.siq-feature {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.siq-feature-icon {
+  display: grid;
+  flex: 0 0 45px;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  border: 1px solid rgba(70, 132, 255, 0.3);
+  border-radius: 14px;
+  background: rgba(42, 102, 255, 0.09);
+  color: #7eb0ff;
+  font-size: 24px;
+}
+
+.siq-feature strong,
+.siq-feature small {
+  display: block;
+}
+
+.siq-feature strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.siq-feature small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.siq-brand-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #8c9eb8;
+  font-size: 12px;
+}
+
+.siq-footer-mark {
+  color: var(--teal);
+  font-size: 18px;
+}
+
+.siq-form-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 42px clamp(20px, 4vw, 64px);
+}
+
+.siq-login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: clamp(25px, 3vw, 38px);
+  border: 1px solid rgba(125, 157, 207, 0.2);
+  border-radius: 24px;
+  background: linear-gradient(
+    145deg,
+    rgba(18, 34, 58, 0.92),
+    rgba(10, 21, 38, 0.96)
+  );
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.22);
+}
+
+.siq-card-topline,
+.siq-password-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.siq-card-label,
+.siq-role-label {
+  color: #8da4c5;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.siq-secure-label {
+  color: #75e8c6;
+  font-size: 10px;
+}
+
+.siq-welcome-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: 32px;
+  border: 1px solid rgba(82, 139, 255, 0.25);
+  border-radius: 15px;
+  background: linear-gradient(
+    145deg,
+    rgba(71, 111, 255, 0.2),
+    rgba(25, 211, 201, 0.09)
+  );
+  color: #8fc5ff;
+  font-size: 24px;
+}
+
+.siq-login-card h2 {
+  margin: 19px 0 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  letter-spacing: -1.2px;
+}
+
+.siq-login-card h2 span {
+  color: var(--teal);
+}
+
+.siq-card-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.siq-role-label {
+  margin: 30px 0 12px;
+}
+
+.siq-role-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 26px;
+}
+
+.siq-role {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 76px;
+  padding: 10px 5px;
+  border: 1px solid rgba(135, 160, 199, 0.18);
+  border-radius: 13px;
+  background: rgba(5, 14, 28, 0.45);
+  color: #a5b6d0;
+  cursor: pointer;
+  font-size: 12px !important;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.siq-role > span {
+  font-size: 20px;
+}
+
+.siq-role:hover {
+  border-color: rgba(82, 139, 255, 0.65);
+  transform: translateY(-1px);
+}
+
+.siq-role.active {
+  border-color: #538bff;
+  background: linear-gradient(
+    145deg,
+    rgba(57, 101, 255, 0.18),
+    rgba(23, 205, 195, 0.08)
+  );
+  color: #f1f6ff;
+  box-shadow: inset 0 0 18px rgba(68, 120, 255, 0.05);
+}
+
+.siq-input-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #e1e9f8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.siq-input-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 53px;
+  margin-bottom: 22px;
+  padding: 0 15px;
+  border: 1px solid rgba(133, 161, 203, 0.24);
+  border-radius: 12px;
+  background: rgba(3, 11, 23, 0.48);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.siq-input-wrap:focus-within {
+  border-color: #568bff;
+  box-shadow: 0 0 0 3px rgba(70, 126, 255, 0.1);
+}
+
+.siq-input-icon {
+  margin-right: 12px;
+  color: #84a7e1;
+  font-size: 17px;
+}
+
+.siq-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f5f8ff;
+  font-size: 13px;
+}
+
+.siq-input-wrap input::placeholder {
+  color: #7185a3;
+}
+
+.siq-password-heading {
+  margin-bottom: 10px;
+}
+
+.siq-password-heading .siq-input-label {
+  margin: 0;
+}
+
+.siq-text-button,
+.siq-eye-button {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: #7fb3ff;
+  cursor: pointer;
+  font-size: 11px !important;
+}
+
+.siq-eye-button {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.siq-remember {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: -1px 0 22px;
+  color: #a5b6d0;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.siq-remember input {
+  width: 15px;
+  height: 15px;
+  accent-color: #548cff;
+}
+
+.siq-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #467aff, #287eff 48%, #19cfc4);
+  box-shadow: 0 9px 28px rgba(49, 113, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  font-size: 13px !important;
+  font-weight: 700;
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.siq-submit:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.siq-submit:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.siq-submit > span {
+  font-size: 20px;
+}
+
+.siq-error {
+  margin: -5px 0 18px;
+  padding: 12px;
+  border: 1px solid rgba(255, 133, 133, 0.25);
+  border-radius: 10px;
+  background: rgba(255, 88, 100, 0.08);
+  color: #ffb4b4;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.siq-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 25px;
+  color: #8195b2;
+  font-size: 10px;
+}
+
+.siq-privacy span {
+  color: #67e4ca;
+}
+
+.siq-help {
+  margin: 24px 0 0;
+  color: #7e91ae;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.siq-mobile-brand {
+  display: none;
+}
+
+.siq-login button:focus-visible,
+.siq-login a:focus-visible,
+.siq-login input:focus-visible {
+  outline: 2px solid #7bcaff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .siq-login {
+    grid-template-columns: 0.85fr 1fr;
+  }
+
+  .siq-brand-panel {
+    padding: 35px 28px;
+  }
+
+  .siq-hero h1 {
+    font-size: clamp(38px, 5vw, 50px);
+    letter-spacing: -2px;
+  }
+
+  .siq-form-panel {
+    padding: 30px 20px;
+  }
+
+  .siq-login-card {
+    padding: 25px 20px;
+  }
+
+  .siq-secure-label {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .siq-login {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .siq-brand-panel {
+    display: none;
+  }
+
+  .siq-form-panel {
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding: 30px 18px;
+  }
+
+  .siq-mobile-brand {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 12px;
+    margin: 0 0 30px;
+  }
+
+  .siq-mobile-brand .siq-brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .siq-mobile-brand strong {
+    font-size: 22px;
+  }
+
+  .siq-login-card {
+    max-width: 480px;
+    padding: 27px 22px;
+    border-radius: 20px;
+  }
+
+  .siq-login-card h2 {
+    font-size: 29px;
+  }
+
+  .siq-welcome-icon {
+    margin-top: 25px;
+  }
+
+  .siq-role-picker {
+    gap: 7px;
+  }
+
+  .siq-role {
+    font-size: 11px !important;
+  }
+
+  .siq-help {
+    max-width: 300px;
+    margin-top: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .siq-login *,
+  .siq-login *::before,
+  .siq-login *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

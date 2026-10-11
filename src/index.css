@@ -7,5 +7,47 @@
 }
 
 body {
-  background: #f1f5f9;
+  background: linear-gradient(180deg, #eef2ff 0%, #f1f5f9 40%, #f8fafc 100%);
+  background-attachment: fixed;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #0f172a;
+}
+
+/* All existing white cards get a premium look automatically */
+.rounded-lg.border.bg-white {
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px rgba(37, 99, 235, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.rounded-lg.border.bg-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.14);
+}
+
+/* Page titles: gradient text */
+h1.text-electric {
+  background: linear-gradient(90deg, #2563eb, #14b8a6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Smooth page entry */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+main > div { animation: fadeUp 0.35s ease both; }
+
+/* Tables */
+thead.bg-slate-100 { background: #e0e7ff; }
+tbody tr:hover { background: #f1f5ff; }
+
+@media (prefers-reduced-motion: reduce) {
+  main > div, .rounded-lg.border.bg-white { animation: none; transition: none; }
+}
+
+@media print {
+  body { background: white; }
+  .rounded-lg.border.bg-white { box-shadow: none; }
 }
