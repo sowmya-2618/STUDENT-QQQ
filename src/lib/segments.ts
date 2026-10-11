@@ -17,7 +17,7 @@ export const segments: Segment[] = [
   { key: 'acad', name: 'High Academic Performance', criteria: 'CGPA 8.0 or above',
     test: (r) => r.cgpa >= 8 },
   { key: 'consistent', name: 'Consistent Performers', criteria: 'Semester GPA changes by 0.3 or less between all semesters, CGPA 6.5+',
-    test: (r) => r.sgpa.length >= 3 && r.cgpa >= 6.5 && r.sgpa.every((g, i) => i === 0 || Math.abs(g - r.sgpa[i - 1]) <= 0.3) },
+    test: (r) => r.sgpa.length >= 3 && r.cgpa >= 6.5 && r.sgpa.every((g: number, i: number) => i === 0 || Math.abs(g - r.sgpa[i - 1]) <= 0.3) },
   { key: 'improving', name: 'Improving Students', criteria: 'Latest semester GPA is at least 0.5 higher than the previous one',
     test: (r) => r.sgpa.length >= 2 && last(r) - prev(r) >= 0.5 },
   { key: 'support', name: 'Academic Support Needed', criteria: 'Academic risk is Medium or High',
