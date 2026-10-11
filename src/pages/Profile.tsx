@@ -3,6 +3,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import Badge from '../components/Badge'
 import { components, rows } from '../lib/analytics'
 import { WEIGHTS, type Comp } from '../lib/score'
+import { drivers } from '../lib/explain'
 
 export default function Profile() {
   const { id } = useParams()
@@ -15,6 +16,9 @@ export default function Profile() {
     )
   }
   const comp = components(s)
+  const drv = drivers(comp)
+  const strongest = drv[0]
+  const weakest = [...drv].sort((a, b) => a.value - b.value)[0]
   const trend = (s.sgpa ?? []).map((g, i) => ({ sem: `Sem ${i + 1}`, gpa: g }))
   const risks = [
     { label: 'Academic risk', r: s.ar },
@@ -75,6 +79,41 @@ export default function Profile() {
             </ResponsiveContainer>
           ) : <p className="text-sm text-slate-500">No semester data available.</p>}
         </div>
+      </div>
+
+      <div className="rounded-lg border bg-white p-4">
+        <p className="mb-2 font-medium">Why this Success Score? (top drivers)</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-slate-100">
+              <tr>
+                <th className="p-2">Component</th>
+                <th className="p-2">Value</th>
+                <th className="p-2">Weight</th>
+                <th className="p-2">Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drv.map((d) => (
+                <tr key={d.key} className="border-t">
+                  <td className="p-2">{d.key}</td>
+                  <td className="p-2">{Math.round(d.value)}</td>
+                  <td className="p-2">{d.weight}%</td>
+                  <td className="p-2">{d.points.toFixed(1)} ({Math.round(d.share)}%)</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {strongest && weakest && (
+          <p className="mt-2 text-sm text-slate-600">
+            Biggest contributor: <b>{strongest.key}</b> ({strongest.points.toFixed(1)} pts).
+            Lowest component: <b>{weakest.key}</b> ({Math.round(weakest.value)}), best place to improve.
+          </p>
+        )}
+        <p className="mt-1 text-xs text-slate-500">
+          Points = value × weight, re-normalised over available components. Missing data is skipped, not counted as zero.
+        </p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
