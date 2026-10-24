@@ -1,5 +1,15 @@
-import { useEffect, useState } from 'react'
-import { NavLink, Route, Routes, Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import type { ReactNode } from 'react'
+import {
+  NavLink,
+  Navigate,
+  Route,
+  Routes,
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +24,8 @@ import {
   Menu,
   X,
   GraduationCap,
+  LogOut,
+  User as UserIcon,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Landing from './pages/Landing'
@@ -28,8 +40,13 @@ import Upload from './pages/Upload'
 import Segments from './pages/Segments'
 import Reports from './pages/Reports'
 import ScoreMethod from './pages/ScoreMethod'
-
-const links: { to: string; label: string; icon: LucideIcon }[] = [
+import LoginPage from './components/LoginPage'
+import { AuthProvider, useAuth } from './auth/AuthContext'
+import ProtectedRoute from './auth/ProtectedRoute'
+ 
+type NavItem = { to: string; label: string; icon: LucideIcon }
+ 
+const facultyLinks: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/students', label: 'Students', icon: Users },
   { to: '/talent', label: 'Hidden Talent', icon: Sparkles },
@@ -41,34 +58,82 @@ const links: { to: string; label: string; icon: LucideIcon }[] = [
   { to: '/reports', label: 'Reports', icon: FileBarChart },
   { to: '/upload', label: 'Upload CSV', icon: UploadIcon },
 ]
-
+ 
 function NotFound() {
   return (
     <p className="p-6">
-      Page not found. <Link className="text-electric underline" to="/dashboard">Go to Dashboard</Link>
+      Page not found. <Link className="text-electric underline" to="/">Go Home</Link>
     </p>
   )
 }
-
-export default function App() {
+ 
+// Faculty-only wrapper
+function FacultyOnly({ children }: { children: ReactNode }) {
+  return <ProtectedRoute allowedRoles={['faculty']}>{children}</ProtectedRoute>
+}
+ 
+// Student / Parent: jump to their own student profile
+function MyProfileRedirect() {
+  const { user } = useAuth()
+  if (!user?.studentId) return <NotFound />
+  return <Navigate to={`/students/${user.studentId}`} replace />
+}
+ 
+// Faculty can open any profile. Student/Parent only their own.
+function ProfileRoute() {
+  const { user } = useAuth()
+  const { id } = useParams()
+  if (user && user.role !== 'faculty' && user.studentId !== id) {
+    return <MyProfileRedirect />
+  }
+  return <Profile />
+}
+ 
+function AppShell() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
   const isLanding = pathname === '/'
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
-
+  const isLogin = pathname === '/login'
+  const isPublic = isLanding || isLogin
+  const showShell = !isPublic && !!user
+ 
+  // menu closes automatically when the page changes
+  const [openPath, setOpenPath] = useState<string | null>(null)
+  const open = openPath === pathname
+ 
   const cls = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${
       isActive
         ? 'bg-gradient-to-r from-electric to-teal font-medium text-white shadow-lg'
         : 'text-slate-300 hover:bg-white/10 hover:text-white'
     }`
-
+ 
+  const links: NavItem[] =
+    user?.role === 'faculty'
+      ? facultyLinks
+      : [
+          {
+            to: user?.role === 'parent' ? '/parent' : '/student',
+            label: 'My Profile',
+            icon: UserIcon,
+          },
+        ]
+ 
+  function handleLogout() {
+    logout()
+    navigate('/login')
+  }
+ 
+  const rootClass = isLanding
+    ? 'min-h-screen bg-slate-50'
+    : isLogin
+      ? 'min-h-screen'
+      : 'app-shell min-h-screen'
+ 
   return (
-    <div className={isLanding ? 'min-h-screen bg-slate-50' : 'app-shell min-h-screen'}>
-      {!isLanding && (
+    <div className={rootClass}>
+      {showShell && (
         <>
           {/* Mobile top bar */}
           <header className="header-glass fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between px-4 text-white shadow-lg md:hidden print:hidden">
@@ -78,21 +143,21 @@ export default function App() {
             </Link>
             <button
               aria-label="Toggle menu"
-              onClick={() => setOpen((o) => !o)}
+              onClick={() => setOpenPath(open ? null : pathname)}
               className="rounded p-1 hover:bg-white/10"
             >
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </header>
-
+ 
           {/* Mobile overlay */}
           {open && (
             <div
               className="fixed inset-0 z-30 bg-black/40 md:hidden print:hidden"
-              onClick={() => setOpen(false)}
+              onClick={() => setOpenPath(null)}
             />
           )}
-
+ 
           {/* Sidebar */}
           <aside
             className={`sidebar-glass fixed inset-y-0 left-0 z-40 flex w-60 flex-col text-white shadow-2xl transition-transform duration-200 md:translate-x-0 print:hidden ${
@@ -113,33 +178,82 @@ export default function App() {
                 </NavLink>
               ))}
             </nav>
-            <p className="border-t border-white/10 p-3 text-xs text-slate-400">
-              Sample data: fictional students
-            </p>
+            <div className="border-t border-white/10 p-3">
+              <p className="truncate text-sm font-medium">{user?.name}</p>
+              <p className="mb-2 truncate text-xs text-slate-400">{user?.title}</p>
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+              <p className="mt-2 text-xs text-slate-500">Sample data: fictional students</p>
+            </div>
           </aside>
         </>
       )}
-
+ 
       <main
         key={pathname}
-        className={isLanding ? '' : 'page-fade pt-14 md:pl-60 md:pt-0 print:p-0'}
+        className={isPublic || !showShell ? '' : 'page-fade pt-14 md:pl-60 md:pt-0 print:p-0'}
       >
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/students/:id" element={<Profile />} />
-          <Route path="/talent" element={<Talent />} />
-          <Route path="/segments" element={<Segments />} />
-          <Route path="/opportunities" element={<Opportunities />} />
-          <Route path="/action-plan" element={<ActionPlan />} />
-          <Route path="/simulator" element={<Simulator />} />
-          <Route path="/score-method" element={<ScoreMethod />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/upload" element={<Upload />} />
+          <Route path="/login" element={<LoginPage />} />
+ 
+          {/* Student / Parent entry points */}
+          <Route
+            path="/student"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <MyProfileRedirect />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/parent"
+            element={
+              <ProtectedRoute allowedRoles={['parent']}>
+                <MyProfileRedirect />
+              </ProtectedRoute>
+            }
+          />
+ 
+          {/* Profile: faculty (any) + student/parent (own only) */}
+          <Route
+            path="/students/:id"
+            element={
+              <ProtectedRoute>
+                <ProfileRoute />
+              </ProtectedRoute>
+            }
+          />
+ 
+          {/* Faculty only */}
+          <Route path="/dashboard" element={<FacultyOnly><Dashboard /></FacultyOnly>} />
+          <Route path="/students" element={<FacultyOnly><Students /></FacultyOnly>} />
+          <Route path="/talent" element={<FacultyOnly><Talent /></FacultyOnly>} />
+          <Route path="/segments" element={<FacultyOnly><Segments /></FacultyOnly>} />
+          <Route path="/opportunities" element={<FacultyOnly><Opportunities /></FacultyOnly>} />
+          <Route path="/action-plan" element={<FacultyOnly><ActionPlan /></FacultyOnly>} />
+          <Route path="/simulator" element={<FacultyOnly><Simulator /></FacultyOnly>} />
+          <Route path="/score-method" element={<FacultyOnly><ScoreMethod /></FacultyOnly>} />
+          <Route path="/reports" element={<FacultyOnly><Reports /></FacultyOnly>} />
+          <Route path="/upload" element={<FacultyOnly><Upload /></FacultyOnly>} />
+ 
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </div>
   )
 }
+ 
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
+  )
+}
+ 
