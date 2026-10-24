@@ -26,9 +26,14 @@ import {
   GraduationCap,
   LogOut,
   User as UserIcon,
+  Bot,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Landing from './pages/Landing'
+import Home from './pages/Home'
+import RoleSelect from './pages/RoleSelect'
+import GlassLayout from './components/GlassLayout'
+import './glass.css'
 import Dashboard from './pages/Dashboard'
 import Students from './pages/Students'
 import Profile from './pages/Profile'
@@ -43,9 +48,11 @@ import ScoreMethod from './pages/ScoreMethod'
 import LoginPage from './components/LoginPage'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import ProtectedRoute from './auth/ProtectedRoute'
- 
+import Assistant from './pages/Assistant'
+import ChatWidget from './chat/ChatWidget'
+
 type NavItem = { to: string; label: string; icon: LucideIcon }
- 
+
 const facultyLinks: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/students', label: 'Students', icon: Users },
@@ -58,7 +65,7 @@ const facultyLinks: NavItem[] = [
   { to: '/reports', label: 'Reports', icon: FileBarChart },
   { to: '/upload', label: 'Upload CSV', icon: UploadIcon },
 ]
- 
+
 function NotFound() {
   return (
     <p className="p-6">
@@ -66,19 +73,19 @@ function NotFound() {
     </p>
   )
 }
- 
+
 // Faculty-only wrapper
 function FacultyOnly({ children }: { children: ReactNode }) {
   return <ProtectedRoute allowedRoles={['faculty']}>{children}</ProtectedRoute>
 }
- 
+
 // Student / Parent: jump to their own student profile
 function MyProfileRedirect() {
   const { user } = useAuth()
   if (!user?.studentId) return <NotFound />
   return <Navigate to={`/students/${user.studentId}`} replace />
 }
- 
+
 // Faculty can open any profile. Student/Parent only their own.
 function ProfileRoute() {
   const { user } = useAuth()
@@ -88,28 +95,30 @@ function ProfileRoute() {
   }
   return <Profile />
 }
- 
+
 function AppShell() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
-  const isLanding = pathname === '/'
-  const isLogin = pathname === '/login'
-  const isPublic = isLanding || isLogin
+  const isPublic =
+    pathname === '/' ||
+    pathname === '/roles' ||
+    pathname === '/landing' ||
+    pathname.startsWith('/login')
   const showShell = !isPublic && !!user
- 
+
   // menu closes automatically when the page changes
   const [openPath, setOpenPath] = useState<string | null>(null)
   const open = openPath === pathname
- 
+
   const cls = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${
       isActive
         ? 'bg-gradient-to-r from-electric to-teal font-medium text-white shadow-lg'
         : 'text-slate-300 hover:bg-white/10 hover:text-white'
     }`
- 
-  const links: NavItem[] =
+
+  const baseLinks: NavItem[] =
     user?.role === 'faculty'
       ? facultyLinks
       : [
@@ -119,18 +128,21 @@ function AppShell() {
             icon: UserIcon,
           },
         ]
- 
+
+  const links: NavItem[] = [
+    ...baseLinks,
+    { to: '/assistant', label: 'AI Assistant', icon: Bot },
+  ]
+
   function handleLogout() {
     logout()
     navigate('/login')
   }
- 
-  const rootClass = isLanding
-    ? 'min-h-screen bg-slate-50'
-    : isLogin
-      ? 'min-h-screen'
-      : 'app-shell min-h-screen'
- 
+
+  const rootClass = isPublic
+    ? 'min-h-screen'
+    : 'app-shell min-h-screen'
+
   return (
     <div className={rootClass}>
       {showShell && (
@@ -149,7 +161,7 @@ function AppShell() {
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </header>
- 
+
           {/* Mobile overlay */}
           {open && (
             <div
@@ -157,7 +169,7 @@ function AppShell() {
               onClick={() => setOpenPath(null)}
             />
           )}
- 
+
           {/* Sidebar */}
           <aside
             className={`sidebar-glass fixed inset-y-0 left-0 z-40 flex w-60 flex-col text-white shadow-2xl transition-transform duration-200 md:translate-x-0 print:hidden ${
@@ -193,15 +205,20 @@ function AppShell() {
           </aside>
         </>
       )}
- 
+
       <main
         key={pathname}
         className={isPublic || !showShell ? '' : 'page-fade pt-14 md:pl-60 md:pt-0 print:p-0'}
       >
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route element={<GlassLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/roles" element={<RoleSelect />} />
+          </Route>
+          <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<LoginPage />} />
- 
+          <Route path="/login/:roleParam" element={<LoginPage />} />
+
           {/* Student / Parent entry points */}
           <Route
             path="/student"
@@ -219,7 +236,7 @@ function AppShell() {
               </ProtectedRoute>
             }
           />
- 
+
           {/* Profile: faculty (any) + student/parent (own only) */}
           <Route
             path="/students/:id"
@@ -229,7 +246,17 @@ function AppShell() {
               </ProtectedRoute>
             }
           />
- 
+
+          {/* AI Assistant: all logged-in roles */}
+          <Route
+            path="/assistant"
+            element={
+              <ProtectedRoute>
+                <Assistant />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Faculty only */}
           <Route path="/dashboard" element={<FacultyOnly><Dashboard /></FacultyOnly>} />
           <Route path="/students" element={<FacultyOnly><Students /></FacultyOnly>} />
@@ -241,14 +268,16 @@ function AppShell() {
           <Route path="/score-method" element={<FacultyOnly><ScoreMethod /></FacultyOnly>} />
           <Route path="/reports" element={<FacultyOnly><Reports /></FacultyOnly>} />
           <Route path="/upload" element={<FacultyOnly><Upload /></FacultyOnly>} />
- 
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+
+      {showShell && pathname !== '/assistant' && <ChatWidget />}
     </div>
   )
 }
- 
+
 export default function App() {
   return (
     <AuthProvider>
@@ -256,4 +285,3 @@ export default function App() {
     </AuthProvider>
   )
 }
- 

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { DEMO_USERS, ROLE_HOME } from '../auth/users';
 import type { Role } from '../auth/users';
@@ -16,9 +16,21 @@ export default function LoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { roleParam } = useParams<{ roleParam?: string }>();
   const from = (location.state as { from?: string } | null)?.from;
 
-  const [role, setRole] = useState<Role>('student');
+  const [role, setRole] = useState<Role>(() => {
+    if (roleParam === 'faculty' || roleParam === 'parent' || roleParam === 'student') {
+      return roleParam;
+    }
+    return 'student';
+  });
+
+  useEffect(() => {
+    if (roleParam === 'faculty' || roleParam === 'parent' || roleParam === 'student') {
+      setRole(roleParam);
+    }
+  }, [roleParam]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
