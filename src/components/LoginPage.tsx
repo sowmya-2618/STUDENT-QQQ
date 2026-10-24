@@ -1,15 +1,42 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  BriefcaseBusiness,
+  CircleCheck,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  TrendingUp,
+  UsersRound,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { DEMO_USERS, ROLE_HOME } from '../auth/users';
 import type { Role } from '../auth/users';
 import './LoginPage.css';
 
-const TABS: { role: Role; label: string; hint: string }[] = [
-  { role: 'student', label: 'Student', hint: 'View your success score and personal action plan' },
-  { role: 'parent', label: 'Parent', hint: "Track your child's progress and risk alerts" },
-  { role: 'faculty', label: 'Faculty', hint: 'Predictions, risk trends and interventions' },
+type LoginRole = Exclude<Role, 'parent'>;
+
+const TABS: { role: LoginRole; label: string; hint: string; icon: LucideIcon }[] = [
+  {
+    role: 'student',
+    label: 'Student',
+    hint: 'View your success score and personal action plan',
+    icon: GraduationCap,
+  },
+  {
+    role: 'faculty',
+    label: 'Faculty',
+    hint: 'Predictions, risk trends and interventions',
+    icon: BriefcaseBusiness,
+  },
+];
+
+const LOGIN_FEATURES: { text: string; icon: LucideIcon }[] = [
+  { text: 'Early-warning risk predictions', icon: TrendingUp },
+  { text: 'Explainable drivers for every student', icon: CircleCheck },
+  { text: 'Targeted, prioritized interventions', icon: UsersRound },
 ];
 
 export default function LoginPage() {
@@ -19,15 +46,15 @@ export default function LoginPage() {
   const { roleParam } = useParams<{ roleParam?: string }>();
   const from = (location.state as { from?: string } | null)?.from;
 
-  const [role, setRole] = useState<Role>(() => {
-    if (roleParam === 'faculty' || roleParam === 'parent' || roleParam === 'student') {
+  const [role, setRole] = useState<LoginRole>(() => {
+    if (roleParam === 'faculty' || roleParam === 'student') {
       return roleParam;
     }
     return 'student';
   });
 
   useEffect(() => {
-    if (roleParam === 'faculty' || roleParam === 'parent' || roleParam === 'student') {
+    if (roleParam === 'faculty' || roleParam === 'student') {
       setRole(roleParam);
     }
   }, [roleParam]);
@@ -42,7 +69,7 @@ export default function LoginPage() {
   const tab = TABS.find((t) => t.role === role) ?? TABS[0];
   const demos = DEMO_USERS.filter((u) => u.role === role);
 
-  function switchRole(r: Role) {
+  function switchRole(r: LoginRole) {
     setRole(r);
     setEmail('');
     setPassword('');
@@ -67,7 +94,8 @@ export default function LoginPage() {
       <aside className="lg-brand">
         <div className="lg-brand-inner">
           <div className="lg-logo">
-            <span className="lg-logo-mark">◈</span> Student IQ
+            <GraduationCap className="lg-logo-mark" size={24} aria-hidden="true" />
+            <span>Student IQ</span>
           </div>
           <h1>
             Predict early.
@@ -79,9 +107,12 @@ export default function LoginPage() {
             to do about it.
           </p>
           <ul className="lg-points">
-            <li><span>▲</span> Early-warning risk predictions</li>
-            <li><span>▲</span> Explainable drivers for every student</li>
-            <li><span>▲</span> Targeted, prioritized interventions</li>
+            {LOGIN_FEATURES.map(({ text, icon: Icon }) => (
+              <li key={text}>
+                <span className="lg-point-icon"><Icon size={16} aria-hidden="true" /></span>
+                {text}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="lg-orb lg-orb-a" />
@@ -103,6 +134,7 @@ export default function LoginPage() {
                 className={`lg-tab ${role === t.role ? 'active' : ''}`}
                 onClick={() => switchRole(t.role)}
               >
+                <t.icon size={16} aria-hidden="true" />
                 {t.label}
               </button>
             ))}
@@ -136,7 +168,7 @@ export default function LoginPage() {
               onClick={() => setShowPw((s) => !s)}
               aria-label={showPw ? 'Hide password' : 'Show password'}
             >
-              {showPw ? 'Hide' : 'Show'}
+              {showPw ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
             </button>
           </div>
 

@@ -25,15 +25,15 @@
   background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 55%, #4f46e5 100%);
 }
 .lg-brand-inner { position: relative; z-index: 2; max-width: 480px; }
-.lg-logo { font-weight: 700; font-size: 18px; letter-spacing: 0.3px; margin-bottom: 48px; }
-.lg-logo-mark { color: #a5b4fc; margin-right: 6px; }
+.lg-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; letter-spacing: 0.3px; margin-bottom: 48px; }
+.lg-logo-mark { color: #a5b4fc; }
 .lg-brand h1 { font-size: 44px; line-height: 1.1; margin: 0 0 18px; font-weight: 800; }
 .lg-tagline { color: #c7d2fe; font-size: 16px; line-height: 1.6; margin: 0 0 32px; }
 .lg-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
 .lg-points li { display: flex; align-items: center; gap: 12px; color: #e0e7ff; font-size: 15px; }
-.lg-points span {
+.lg-point-icon {
   display: inline-grid; place-items: center; width: 22px; height: 22px;
-  border-radius: 6px; background: rgba(255, 255, 255, 0.14); color: #a5b4fc; font-size: 10px;
+  flex: 0 0 22px; border-radius: 6px; background: rgba(255, 255, 255, 0.14); color: #a5b4fc;
 }
 .lg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.45; z-index: 1; }
 .lg-orb-a { width: 320px; height: 320px; background: #818cf8; top: -80px; right: -80px; }
@@ -60,7 +60,8 @@
 .lg-pw input { padding-right: 64px; }
 .lg-eye {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  background: none; border: 0; color: var(--lg-primary); font-weight: 600; font-size: 13px; cursor: pointer; padding: 6px 8px;
+  display: grid; place-items: center; background: none; border: 0; color: var(--lg-primary);
+  cursor: pointer; padding: 6px 8px;
 }
 .lg-error {
   margin-top: 16px; padding: 10px 12px; border-radius: 10px; font-size: 13px;
@@ -93,12 +94,13 @@
 .lg-demo-btn small { font-size: 11.5px; color: var(--lg-muted); }
 
 .lg-tabs {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
   padding: 4px; border-radius: 12px; background: #f1f5f9; margin-bottom: 8px;
 }
 .lg-tab {
   height: 38px; border: 0; border-radius: 9px; background: transparent;
   font-size: 13.5px; font-weight: 600; color: var(--lg-muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
   transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 .lg-tab:hover { color: var(--lg-text); }
